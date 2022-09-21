@@ -1,26 +1,35 @@
-from sql_alchemy_ import banco
-
+from sql_alchemy import banco
 
 class HotelModel(banco.Model):
 
-    __tablename__ = 'hoteis'
-    hotel_id = banco.Column(banco.String, primary_key=True)
-    nome = banco.Column(banco.String(80))
-    estrelas = banco.Column(banco.Float(precision=1))
-    diaria = banco.Column(banco.Float(precision=2))
-    cidade = banco.Column(banco.String(40))
-    def __init__(self, hotel_id, nome, estrelas, diaria,cidade):
-        self.hotel_id = hotel_id
-        self.nome = nome
-        self.estrelas = estrelas
-        self.diaria = diaria
-        self.cidade = cidade
-        
+    tablename = 'hoteis'
+    id_hotel = banco.Column(banco.Integer, primary_key=True)
+    nome_hotel = banco.Column(banco.String(80))
+    estrelas_hotel = banco.Column(banco.Float(precision=1))
+    diaria_hotel = banco.Column(banco.Float(precision=2))
+    cidade_hotel = banco.Column(banco.String(40))
+
+
+
+    def init(self, nome_hotel, estrelas_hotel, diaria_hotel, cidade_hotel):
+        self.nome_hotel = nome_hotel
+        self.estrelas_hotel = estrelas_hotel
+        self.diaria_hotel = diaria_hotel
+        self.cidade_hotel = cidade_hotel
+
     def json (self):
         return {
-            'hotel_id': self.hotel_id,
-            'nome': self.nome,
-            'estrelas': self.estrelas,
-            'diaria': self.diaria,
-            'cidade': self.cidade
-        }    
+            'hotel': self.id_hotel,
+            'nome': self.nome_hotel,
+            'estrelas': self.estrelas_hotel,
+            'diaria': self.diaria_hotel,
+            'cidade': self.cidade_hotel
+        }
+
+
+    @classmethod
+    def find_hotel(cls, id_hotel):
+        hotel = cls.query.filter_by(id_hotel=id_hotel).first()# SELECT * FROM hotel WHERE id_hotel = $id_hotel
+        if hotel:
+            return hotel
+        return None

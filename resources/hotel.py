@@ -1,5 +1,4 @@
 from flask_restful import Resource, reqparse
-from models.hotel import HotelModel
 
 hoteis = [{
         'hotel_id': 'alpha',
@@ -21,9 +20,6 @@ hoteis = [{
         'estrelas':4.9,
         'diaria':1025.59,
         'cidade':'Sergipe'}]
-
-
-
 
 class Hoteis(Resource):
     def get(self):
@@ -47,23 +43,25 @@ class Hotel(Resource):
         if hotel:
             return hotel
         return {'mensagem': 'Hotel não encontrado'},404
+        s
     def post(self,hotel_id):
         
         dados = Hotel.arguments.parse_args()
-        hotel_objeto = HotelModel(hotel_id, **dados)
-        novo_hotel = hotel_objeto.json()
+        novo_hotel = {'hotel_id': hotel_id, **dados}
+
         hoteis.append(novo_hotel)
         return novo_hotel,200
+
     def put(self,hotel_id):
         dados = Hotel.arguments.parse_args()
-        hotel_objeto = HotelModel(hotel_id, **dados)
-        novo_hotel = hotel_objeto.json()
+        novo_hotel = {'hotel_id': hotel_id, **dados}
         hotel = Hotel.find_hotel(hotel_id)
         if hotel:
             hotel.update(novo_hotel)
             return novo_hotel, 200 #ok
         hoteis.append(novo_hotel)
         return novo_hotel, 201 # criado
+
     def delete(self,hotel_id):
         global hoteis
         hoteis = [hotel for hotel in hoteis if hotel['hotel_id'] != hotel_id]
